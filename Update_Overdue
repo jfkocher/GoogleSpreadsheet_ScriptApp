@@ -1,0 +1,79 @@
+function Overdue() {
+  //Set variables for operation spreadsheet sheets
+  var app = SpreadsheetApp;
+  var ss = app.getActiveSpreadsheet();
+  var sheet = "DPO Tracker ";
+  
+  var data = ss.getSheetByName(sheet).getDataRange().getValues();
+  
+  //Status field to update
+  var col_print = data[0].indexOf("Status") + 1;
+  
+  //How many rows to check?
+  var Avals = ss.getSheetByName(sheet).getRange("A1:A").getValues();
+  var endRow = Avals.filter(String).length;
+  
+  //var endRow = ss.getSheetByName(sheet).getLastRow();  
+  var startRow = 2;
+   
+  ///////////////////////////////
+  //Construct Today's Date
+  var today = new Date();
+  var dd = String(today.getDate());
+  var mm = String(today.getMonth() + 1); //January is 0!
+  var yyyy = today.getFullYear();
+
+    if(dd.length == 1) {
+      var dd = '0' + dd;
+    }
+    if(mm.length == 1) {
+      var mm = '0' + mm;
+    }
+
+
+  var current_date = yyyy + mm + dd;
+  
+ 
+  //Logger.log(current_date);
+  ///////////////////////////////
+
+  var i;
+  for(i = startRow; i < endRow + 1; i++){
+  
+    //var test = getByName('Due Date',i).getDate();
+ 
+      var col = data[0].indexOf("Status");
+      if (col != -1) {
+      var check_Status = data[i-1][col];
+       }
+      var col = data[0].indexOf("Due Date");
+      if (col != -1) {
+      var date = data[i-1][col];
+       }   
+
+    var dd_due = String(date.getDate());
+    var mm_due = String(date.getMonth() + 1);
+    var yyyy_due = String(date.getFullYear());
+    
+    if(dd_due.length == 1) {
+      var dd_due = '0' + dd_due;
+    }
+    if(mm_due.length == 1) {
+      var mm_due = '0' + mm_due;
+    }
+    
+    var check_DueDate = yyyy_due + mm_due + dd_due;
+
+
+    if ((typeof check_DueDate !== 'undefined' && check_DueDate !== '') && (check_Status !== "Completed") && (check_DueDate < current_date)) {
+       ss.getSheetByName(sheet).getRange(i,col_print).setValue("Overdue");
+    }
+ 
+    Logger.log(i);
+    Logger.log(check_DueDate)
+
+    //Logger.log(check_Status);
+    
+    }
+
+}
