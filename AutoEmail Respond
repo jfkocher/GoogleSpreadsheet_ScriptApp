@@ -1,0 +1,45 @@
+function autoResponder(e){
+
+Logger.log(e.namedValues.Name[0]);
+Logger.log(e.namedValues.Email[0]);
+
+var name = e.namedValues.Name[0];
+var email = e.namedValues.Email[0];
+var adminEmail = "jfkocher@philasd.org";
+
+var Purpose_Use = e.namedValues["Purpose/Use"];
+var Data_Request_d = e.namedValues["Data Request (detailed)"];
+var Data_Points = e.namedValues["Data Points Requested"];
+var Reporting_Level = e.namedValues["Reporting Level"];
+var Sub_Group = e.namedValues["Sub-Group"];
+var Time_Period = e.namedValues["Time Period"];
+var Data_Scope = e.namedValues["Data Scope"];
+
+
+
+
+
+var msgHtml = "<p>" + "Dear " + name + "," + "</p>" +
+                       "<p>" + "\n\nThank you for your interest in district data. We have received your request for the following purpose: \n\n" + "</p>" +
+                       "<p>" +   Purpose_Use + "</p>" +
+                        "<p>" + "\n\nPlease note that there is a 60 day minimum for completing data requests. We will contact you if we require additonal information regarding your request. Please contact us via sdpdatarequest@philasd.org if you have any further questions." + "</p>" +
+                        "<p>" + "\n\nHere is a summary of what you have requested:" + "</p>" +
+                        "<p>" + "\n\n<b>Data Request (detailed):</b><br>" + Data_Request_d + "</p>" +
+                        "<p>" + "\n\n<b>Data Points Requested: </b><br>" + Data_Points + "</p>" +
+                        "<p>" + "\n\n<b>Reporting Level: </b><br>" + Reporting_Level + "</p>" +
+                        "<p>" + "\n\n<b>Sub-Group: </b><br>" + Sub_Group + "</p>" +
+                        "<p>" + "\n\n<b>Time Period: </b><br>" + Time_Period + "</p>" +
+                        "<p>" + "\n\n<b>Data Scope: </b><br>" + Data_Scope + "</p>";
+
+var msgPlain = msgHtml.replace(/(<([^>]+)>)/ig, ""); 
+
+
+MailApp.sendEmail(email, "Automatic Reply Email", msgPlain,{htmlBody: msgHtml, noReply: true});
+
+
+
+var quota = MailApp.getRemainingDailyQuota();
+
+Logger.log("Remaining email Quota: " + quota);
+
+}
